@@ -1,5 +1,6 @@
 # Piskvorky
 from random import randrange
+from random import choice
 
 def vyhodnot(pole):
     # Funkce vrací jednoznakový řetězec podle stavu hry
@@ -34,14 +35,23 @@ def tah_hrace(pole):
 
 
 def tah_pocitace(pole):
-    # Zaznamená do hry tah počítače
+    # Zaznamená do hry tah počítače (snaží se hrát vedle značky soupeře)
     cislo_policka = -1
     symbol = "o"
     while cislo_policka not in range(20) or pole[cislo_policka] != "-":
-        cislo_policka = randrange(20)
+        if pole.find("-x") == -1 and pole.find("x-") == -1:
+            cislo_policka = randrange(20)
+        elif pole.find("-x") > -1 and pole.find("x-") > -1:
+            cislo_policka = choice([pole.index("-x"),pole.index("x-")+1])
+        elif pole.find("-x") == -1:
+            cislo_policka = pole.index("x-")+1
+        else:
+            cislo_policka = pole.index("-x")
+
         if pole[cislo_policka] == "-":
             pole = tah(pole, cislo_policka, symbol)
-            return pole     
+            return pole   
+               
 
 def piskvorky1d():
     # Hraje hru piškvorky (hráč x počítač)
